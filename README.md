@@ -1,6 +1,6 @@
 # ResQMesh: Urgency-Aware Scheduling for LoRa Mesh Networks
 
-## 📌 Overview
+##  Overview
 
 ResQMesh is a lightweight urgency-aware scheduling framework designed for LoRa mesh networks in disaster communication scenarios. Traditional schedulers such as FIFO and Round Robin treat all messages equally, leading to delays in critical alerts.
 
@@ -8,7 +8,7 @@ This project introduces a heuristic-based scheduling mechanism that prioritizes 
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 * Urgency-aware scheduling using heuristic scoring
 * Congestion-aware prioritization
@@ -19,7 +19,7 @@ This project introduces a heuristic-based scheduling mechanism that prioritizes 
 
 ---
 
-## 🧠 System Architecture
+##  System Architecture
 
 The system consists of:
 
@@ -31,7 +31,7 @@ The system consists of:
 
 ---
 
-## 📊 Urgency Function
+##  Urgency Function
 
 The urgency score is computed as:
 
@@ -45,7 +45,7 @@ Where:
 
 ---
 
-## 🤖 Machine Learning Component
+##  Machine Learning Component
 
 * Model: Decision Tree Classifier
 * Features: Cm, Sm, hop count
@@ -54,7 +54,7 @@ Where:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 ResQMesh/
@@ -76,31 +76,31 @@ ResQMesh/
 
 ---
 
-## 📊 Results Summary
+##  Results Summary
 
 The performance of different scheduling strategies is evaluated using key network metrics.
 
 ---
 
-### 📉 Mean Latency
+###  Mean Latency
 
 <img src="results/mean_latency.png" width="600"/>
 
-### 📉 P75 Latency
+###  P75 Latency
 
 <img src="results/p75_latency.png" width="600"/>
 
-### 📊 Jitter
+###  Jitter
 
 <img src="results/jitter.png" width="600"/>
 
-### 📦 Delivery Ratio
+###  Delivery Ratio
 
 <img src="results/delivery_ratio.png" width="600"/>
 
 ---
 
-### 📋 Numerical Results
+###  Numerical Results
 
 | Scheduler     | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
 | ------------- | ------------ | ----------- | ------ | -------------- |
@@ -111,7 +111,7 @@ The performance of different scheduling strategies is evaluated using key networ
 
 ---
 
-## ▶️ How to Run
+##  How to Run
 
 ### 1. Generate Dataset
 
@@ -139,7 +139,7 @@ python plot.py
 
 ---
 
-## 🧪 Simulation Details
+##  Simulation Details
 
 * Nodes: 50
 * Simulation Time: 2000–4000 ticks
@@ -154,7 +154,7 @@ Includes:
 
 ---
 
-## 🌍 Applications
+##  Applications
 
 * Disaster communication systems
 * Emergency response networks
@@ -163,7 +163,7 @@ Includes:
 
 ---
 
-## 🔮 Future Improvements
+##  Future Improvements
 
 * Integration with real LoRa hardware
 * Advanced ML models (Random Forest, XGBoost)
@@ -172,7 +172,7 @@ Includes:
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 Moniish Mohan Srinivasan
 B.Tech CSE, VIT Chennai
