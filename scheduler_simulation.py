@@ -2,9 +2,7 @@ import random
 import numpy as np
 from collections import deque
 
-# -----------------------
-# Simulation Parameters
-# -----------------------
+
 NUM_NODES = 50
 SIM_TIME = 4000
 Q_MAX = 100
@@ -14,18 +12,14 @@ RETRANS_PROB = 0.15
 SPIKE_PROB = 0.1
 TTL = 300
 
-# -----------------------
-# Message Class
-# -----------------------
+
 class Message:
     def __init__(self, arrival, criticality, hop):
         self.arrival = arrival
         self.criticality = criticality
         self.hop = hop
 
-# -----------------------
-# Channel Model
-# -----------------------
+
 def transmission_delay(hop):
     base = hop
     noise = random.uniform(0,2)
@@ -40,9 +34,7 @@ def transmission_delay(hop):
 
     return base + noise + spike + retrans
 
-# -----------------------
-# Urgency Function (Normalized)
-# -----------------------
+
 def urgency(Tm, Cm, Sm):
     T_norm = min(Tm / 50, 1)
     C_norm = Cm / 3
@@ -51,17 +43,13 @@ def urgency(Tm, Cm, Sm):
     W1, W2, W3 = 0.6, 0.3, 0.1
     return W1*T_norm + W2*C_norm + W3*S_norm
 
-# -----------------------
-# Generate Message
-# -----------------------
+
 def generate_message(t):
     Cm = random.choice([1,2,3])
     hop = random.randint(1,7)
     return Message(t, Cm, hop)
 
-# -----------------------
-# FIFO Scheduler (Global FIFO)
-# -----------------------
+
 def select_fifo(queues):
     oldest_msg = None
     oldest_q = None
@@ -81,9 +69,7 @@ def select_fifo(queues):
 
     return oldest_msg
 
-# -----------------------
-# Round Robin Scheduler
-# -----------------------
+
 def select_rr(queues, rr_index):
     n = len(queues)
     for i in range(n):
@@ -93,9 +79,7 @@ def select_rr(queues, rr_index):
             return msg, (idx + 1) % n
     return None, rr_index
 
-# -----------------------
-# ResQMesh Scheduler
-# -----------------------
+
 def select_resqmesh(queues, t):
     best = None
     best_q = None
@@ -121,9 +105,7 @@ def select_resqmesh(queues, t):
 
     return best
 
-# -----------------------
-# ML Boost Scheduler
-# -----------------------
+
 def ml_risk_prediction(Cm, Sm, hop):
     risk = 0
     if Sm > 0.6:
@@ -162,9 +144,7 @@ def select_resqmesh_ml(queues, t):
 
     return best
 
-# -----------------------
-# Simulation
-# -----------------------
+
 def run_simulation(scheduler_type):
     queues = [deque() for _ in range(NUM_NODES)]
     channel_busy_until = 0
@@ -218,9 +198,7 @@ def run_simulation(scheduler_type):
 
     return latencies, generated, delivered
 
-# -----------------------
-# Metrics
-# -----------------------
+
 def compute_metrics(latencies, generated, delivered):
     mean_latency = np.mean(latencies)
     p75 = np.percentile(latencies, 75)
@@ -229,9 +207,7 @@ def compute_metrics(latencies, generated, delivered):
 
     return mean_latency, p75, jitter, delivery_ratio
 
-# -----------------------
-# Run Experiments
-# -----------------------
+
 schedulers = ["FIFO", "RR", "RESQ", "ML_RESQ"]
 
 for sch in schedulers:

@@ -11,14 +11,12 @@ GEN_PROB = 0.15
 RETRANS_PROB = 0.15
 SPIKE_PROB = 0.1
 
-# Message class
 class Message:
     def __init__(self, arrival, criticality, hop):
         self.arrival = arrival
         self.criticality = criticality
         self.hop = hop
 
-# Channel model
 def transmission_delay(hop):
     base = hop
     noise = random.uniform(0,2)
@@ -33,12 +31,10 @@ def transmission_delay(hop):
 
     return base + noise + spike + retrans
 
-# Urgency function
 def urgency(Tm, Cm, Sm):
     W1, W2, W3 = 0.5, 0.3, 0.2
     return W1*Tm + W2*Cm + W3*Sm
 
-# Generate message
 def generate_message(t):
     Cm = random.choice([1,2,3])
     hop = random.randint(1,7)
@@ -52,13 +48,12 @@ def generate_dataset():
 
     for t in range(SIM_TIME):
 
-        # Message generation
+    
         for i in range(NUM_NODES):
             if random.random() < GEN_PROB:
                 if len(queues[i]) < Q_MAX:
                     queues[i].append(generate_message(t))
 
-        # Scheduling
         if t >= channel_busy_until:
 
             all_msgs = []
@@ -109,13 +104,12 @@ def generate_dataset():
         "Tm", "Cm", "Sm", "hop", "latency"
     ])
 
-    # Label generation (P75 rule)
     threshold = np.percentile(df["latency"], 75)
     df["label"] = (df["latency"] > threshold).astype(int)
 
     return df
 
-# Run dataset generation
+
 df = generate_dataset()
 print(df.head())
 print("Dataset size:", len(df))
