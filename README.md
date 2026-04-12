@@ -102,12 +102,59 @@ The performance of different scheduling strategies is evaluated using key networ
 
 ###  Numerical Results
 
-| Scheduler     | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
-| ------------- | ------------ | ----------- | ------ | -------------- |
-| FIFO          | 287.68       | 306.05      | 54.91  | 0.308          |
-| Round Robin   | 210.92       | 275.27      | 78.39  | 0.309          |
-| ResQMesh      | 93.90        | 106.86      | 58.35  | 0.305          |
-| ResQMesh + ML | 85.87        | 91.03       | 57.56  | 0.297          |
+## Baseline
+
+| Scheduler        | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
+|------------------|-------------|-------------|--------|----------------|
+| FIFO             | 288.71      | 306.16      | 53.08  | 0.307          |
+| Round Robin      | 211.14      | 275.99      | 78.47  | 0.307          |
+| ResQMesh         | 96.03       | 112.22      | 59.19  | 0.305          |
+| ResQMesh + ML    | 86.74       | 91.87       | 57.59  | 0.293          |
+
+## High Routine
+
+| Scheduler        | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
+|------------------|-------------|-------------|--------|----------------|
+| FIFO             | 287.70      | 306.12      | 55.57  | 0.306          |
+| Round Robin      | 212.27      | 275.43      | 77.74  | 0.304          |
+| ResQMesh         | 87.29       | 88.31       | 61.52  | 0.306          |
+| ResQMesh + ML    | 72.92       | 70.37       | 54.66  | 0.278          |
+
+## Burst
+
+| Scheduler        | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
+|------------------|-------------|-------------|--------|----------------|
+| FIFO             | 293.34      | 307.37      | 49.03  | 0.062          |
+| Round Robin      | 275.83      | 300.25      | 49.68  | 0.062          |
+| ResQMesh         | 209.08      | 270.62      | 74.14  | 0.061          |
+| ResQMesh + ML    | 159.98      | 233.06      | 82.30  | 0.046          |
+
+## SOS Intensive
+
+| Scheduler        | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
+|------------------|-------------|-------------|--------|----------------|
+| FIFO             | 287.70      | 306.12      | 55.57  | 0.306          |
+| Round Robin      | 212.27      | 275.43      | 77.74  | 0.304          |
+| ResQMesh         | 156.80      | 225.07      | 79.83  | 0.305          |
+| ResQMesh + ML    | 105.32      | 128.70      | 65.70  | 0.229          |
+
+## Large Load
+
+| Scheduler        | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
+|------------------|-------------|-------------|--------|----------------|
+| FIFO             | 293.34      | 307.37      | 49.03  | 0.062          |
+| Round Robin      | 275.83      | 300.25      | 49.68  | 0.062          |
+| ResQMesh         | 209.08      | 270.62      | 74.14  | 0.061          |
+| ResQMesh + ML    | 159.98      | 233.06      | 82.30  | 0.046          |
+
+## Packet Loss
+
+| Scheduler        | Mean Latency | P75 Latency | Jitter | Delivery Ratio |
+|------------------|-------------|-------------|--------|----------------|
+| FIFO             | 289.44      | 306.87      | 53.58  | 0.280          |
+| Round Robin      | 213.95      | 278.10      | 78.79  | 0.282          |
+| ResQMesh         | 106.96      | 137.40      | 65.97  | 0.281          |
+| ResQMesh + ML    | 91.81       | 99.98       | 60.17  | 0.261          |
 
 ---
 
@@ -142,7 +189,7 @@ python plot.py
 ##  Simulation Details
 
 * Nodes: 50
-* Simulation Time: 2000–4000 ticks
+* Simulation Time: 4000 ticks
 * Max Queue Size: 100
 * Multi-hop range: 1–7 hops
 
