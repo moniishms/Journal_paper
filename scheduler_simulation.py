@@ -67,6 +67,38 @@ def select_rr(queues, rr_index):
             msg = queues[idx].popleft()
             return msg, (idx + 1) % n
     return None, rr_index
+def select_fps(queues):
+    best = None
+    best_q = None
+    best_index = None
+    highest_priority = -1
+
+    for q in queues:
+        for i, m in enumerate(q):
+            # Higher criticality = higher priority
+            # Priority mapping:
+            # 3 = SOS (Highest)
+            # 2 = Emergency
+            # 1 = Routine
+            priority = m.criticality
+
+            if priority > highest_priority:
+                highest_priority = priority
+                best = m
+                best_q = q
+                best_index = i
+
+            # FIFO within the same priority
+            elif priority == highest_priority:
+                if m.arrival < best.arrival:
+                    best = m
+                    best_q = q
+                    best_index = i
+
+    if best:
+        del best_q[best_index]
+
+    return best
 
 def select_resqmesh(queues, t):
     best = None
@@ -114,7 +146,7 @@ def select_resqmesh_ml(queues, t):
             Sm = len(q) / Q_MAX
             base = urgency(Tm, Cm, Sm)
             risk = ml_risk_prediction(Cm, Sm, m.hop)
-            score = base + 0.5 * risk
+            score = base + 0.2 * risk
             if score > best_score:
                 best_score = score
                 best = m
@@ -174,6 +206,8 @@ def run_simulation(scheduler_type, scenario="baseline"):
                 msg = select_fifo(queues)
             elif scheduler_type == "RR":
                 msg, rr_index = select_rr(queues, rr_index)
+            elif scheduler_type == "FPS":
+                msg = select_fps(queues)
             elif scheduler_type == "RESQ":
                 msg = select_resqmesh(queues, t)
             elif scheduler_type == "ML_RESQ":
@@ -207,7 +241,7 @@ scenarios = [
     "packet_loss"
 ]
 
-schedulers = ["FIFO", "RR", "RESQ", "ML_RESQ"]
+schedulers = ["FIFO", "RR", "FPS","RESQ", "ML_RESQ"]
 
 results = {}
 
