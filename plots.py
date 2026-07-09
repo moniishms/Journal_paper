@@ -115,8 +115,7 @@ for scenario, values in results.items():
     plt.tight_layout(pad=1.8)
 
     plt.savefig(
-        f"MeanLatency_{scenario}.png",
-        dpi=600,
+        f"MeanLatency_{scenario}.pdf",
         bbox_inches="tight"
     )
 
@@ -228,8 +227,7 @@ for scenario, values in results.items():
     plt.tight_layout(pad=1.8)
 
     plt.savefig(
-        f"P75Latency_{scenario}.png",
-        dpi=600,
+        f"P75Latency_{scenario}.pdf",
         bbox_inches="tight"
     )
 
@@ -352,8 +350,7 @@ for scenario, values in results.items():
     plt.tight_layout(pad=1.8)
 
     plt.savefig(
-        f"Jitter_{scenario}.png",
-        dpi=600,
+        f"Jitter_{scenario}.pdf", 
         bbox_inches="tight"
     )
 
@@ -478,8 +475,7 @@ for scenario, values in results.items():
     plt.tight_layout(pad=1.8)
 
     plt.savefig(
-        f"DeliveryRatio_{scenario}.png",
-        dpi=600,
+        f"DeliveryRatio_{scenario}.pdf",
         bbox_inches="tight"
     )
 
