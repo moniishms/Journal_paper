@@ -168,7 +168,7 @@ def run_simulation(scheduler_type, scenario="baseline"):
     if scenario == "high_routine":
         criticality_pool = [1, 1, 1, 2, 3]
     elif scenario == "burst":
-        gen_prob = 0.05
+        pass
     elif scenario == "sos_intensive":
         criticality_pool = [1, 2, 3, 3, 3]
     elif scenario == "large_load":
@@ -190,10 +190,13 @@ def run_simulation(scheduler_type, scenario="baseline"):
             for m in list(q):
                 if t - m.arrival > TTL:
                     q.remove(m)
+        current_gen_prob = gen_prob
+        if scenario == "burst" and 1500 <= t < 2000:
+            current_gen_prob = 0.08   # spike above baseline for a limited window
 
         # Message generation
         for i in range(NUM_NODES):
-            if random.random() < gen_prob:
+            if random.random() < current_gen_prob:
                 if len(queues[i]) < Q_MAX:
                     queues[i].append(
                         generate_message(t, criticality_pool)
