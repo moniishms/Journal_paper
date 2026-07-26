@@ -1,18 +1,25 @@
 import random
 import numpy as np
 from collections import deque
+import joblib
+import pandas as pd
 
 NUM_NODES = 50
 SIM_TIME = 4000
 Q_MAX = 100
 SPIKE_PROB = 0.1
 TTL = 300
+ML_WEIGHT = 0.2
+
+ml_model = joblib.load("resqmesh_dt_model.pkl")
+
 
 class Message:
     def __init__(self, arrival, criticality, hop):
         self.arrival = arrival
         self.criticality = criticality
         self.hop = hop
+
 
 def transmission_delay(hop, retrans_prob):
     base = hop
@@ -28,17 +35,20 @@ def transmission_delay(hop, retrans_prob):
 
     return base + noise + spike + retrans
 
+
 def urgency(Tm, Cm, Sm):
     T_norm = min(Tm / 50, 1)
     C_norm = Cm / 3
     S_norm = Sm
     W1, W2, W3 = 0.6, 0.3, 0.1
-    return W1*T_norm + W2*C_norm + W3*S_norm
+    return W1 * T_norm + W2 * C_norm + W3 * S_norm
+
 
 def generate_message(t, criticality_pool):
     Cm = random.choice(criticality_pool)
     hop = random.randint(1, 7)
     return Message(t, Cm, hop)
+
 
 def select_fifo(queues):
     oldest_msg = None
@@ -59,6 +69,7 @@ def select_fifo(queues):
 
     return oldest_msg
 
+
 def select_rr(queues, rr_index):
     n = len(queues)
     for i in range(n):
@@ -67,6 +78,8 @@ def select_rr(queues, rr_index):
             msg = queues[idx].popleft()
             return msg, (idx + 1) % n
     return None, rr_index
+
+
 def select_fps(queues):
     best = None
     best_q = None
@@ -75,11 +88,6 @@ def select_fps(queues):
 
     for q in queues:
         for i, m in enumerate(q):
-            # Higher criticality = higher priority
-            # Priority mapping:
-            # 3 = SOS (Highest)
-            # 2 = Emergency
-            # 1 = Routine
             priority = m.criticality
 
             if priority > highest_priority:
@@ -87,8 +95,6 @@ def select_fps(queues):
                 best = m
                 best_q = q
                 best_index = i
-
-            # FIFO within the same priority
             elif priority == highest_priority:
                 if m.arrival < best.arrival:
                     best = m
@@ -99,6 +105,7 @@ def select_fps(queues):
         del best_q[best_index]
 
     return best
+
 
 def select_resqmesh(queues, t):
     best = None
@@ -123,44 +130,47 @@ def select_resqmesh(queues, t):
 
     return best
 
-def ml_risk_prediction(Cm, Sm, hop):
-    risk = 0
-    if Sm > 0.6:
-        risk += 0.5
-    if Cm == 3:
-        risk += 0.3
-    if hop > 4:
-        risk += 0.2
-    return risk
 
 def select_resqmesh_ml(queues, t):
-    best = None
-    best_q = None
-    best_index = None
-    best_score = -1
-
+    candidates = []
     for q in queues:
         for i, m in enumerate(q):
             Tm = t - m.arrival
             Cm = m.criticality
             Sm = len(q) / Q_MAX
-            base = urgency(Tm, Cm, Sm)
-            risk = ml_risk_prediction(Cm, Sm, m.hop)
-            score = base + 0.2 * risk
-            if score > best_score:
-                best_score = score
-                best = m
-                best_q = q
-                best_index = i
+            candidates.append((m, q, i, Tm, Cm, Sm))
+
+    if not candidates:
+        return None
+
+    feat_df = pd.DataFrame(
+        [[c[4], c[5], c[0].hop] for c in candidates],
+        columns=["Cm", "Sm", "hop"]
+    )
+    risks = ml_model.predict_proba(feat_df)[:, 1]
+
+    best = None
+    best_q = None
+    best_index = None
+    best_score = -1
+
+    for (m, q, i, Tm, Cm, Sm), risk in zip(candidates, risks):
+        base = urgency(Tm, Cm, Sm)
+        score = base + ML_WEIGHT * risk
+        if score > best_score:
+            best_score = score
+            best = m
+            best_q = q
+            best_index = i
 
     if best:
         del best_q[best_index]
 
     return best
 
+
 def run_simulation(scheduler_type, scenario="baseline"):
 
-    # Scenario parameters
     gen_prob = 0.01
     retrans_prob = 0.15
     criticality_pool = [1, 2, 3]
@@ -185,16 +195,15 @@ def run_simulation(scheduler_type, scenario="baseline"):
 
     for t in range(SIM_TIME):
 
-        # Drop old packets
         for q in queues:
             for m in list(q):
                 if t - m.arrival > TTL:
                     q.remove(m)
+
         current_gen_prob = gen_prob
         if scenario == "burst" and 1500 <= t < 2000:
-            current_gen_prob = 0.08   # spike above baseline for a limited window
+            current_gen_prob = 0.08
 
-        # Message generation
         for i in range(NUM_NODES):
             if random.random() < current_gen_prob:
                 if len(queues[i]) < Q_MAX:
@@ -203,7 +212,6 @@ def run_simulation(scheduler_type, scenario="baseline"):
                     )
                     generated += 1
 
-        # Scheduling
         if t >= channel_busy_until:
             if scheduler_type == "FIFO":
                 msg = select_fifo(queues)
@@ -227,6 +235,7 @@ def run_simulation(scheduler_type, scenario="baseline"):
 
     return latencies, generated, delivered
 
+
 def compute_metrics(latencies, generated, delivered):
     mean_latency = np.mean(latencies)
     p75 = np.percentile(latencies, 75)
@@ -234,7 +243,7 @@ def compute_metrics(latencies, generated, delivered):
     delivery_ratio = delivered / generated if generated > 0 else 0
     return mean_latency, p75, jitter, delivery_ratio
 
-# Run all scenarios and schedulers
+
 scenarios = [
     "baseline",
     "high_routine",
@@ -244,7 +253,7 @@ scenarios = [
     "packet_loss"
 ]
 
-schedulers = ["FIFO", "RR", "FPS","RESQ", "ML_RESQ"]
+schedulers = ["FIFO", "RR", "FPS", "RESQ", "ML_RESQ"]
 
 results = {}
 
