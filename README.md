@@ -138,6 +138,6 @@ If you use this code or dataset, please cite:
 ```
 
 
-## Acknowledgment
+## Institution
 
-The authors would like to thank Vellore Institute of Technology (VIT), Chennai, for providing the academic environment, computing resources, and infrastructure that supported this research.
+This work was carried out as part of academic research at Vellore Institute of Technology (VIT), Chennai.
