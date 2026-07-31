@@ -3,7 +3,7 @@
 This repository contains the simulation code, machine learning pipeline, dataset, and result figures for the paper:
 
 > **An Urgency-Aware Scheduling Framework for LoRa Mesh Networks in Disaster Communication**
-> Moniish Mohan Srinivasan, Kirankumar Manivannan, Reena Roy R, Kumaran K, Saranya G
+> Moniish Mohan Srinivasan, Kirankumar Manivannan, Kumaran K, Saranya G
 > Vellore Institute of Technology (VIT), Chennai
 
 ---
@@ -131,20 +131,12 @@ If you use this code or dataset, please cite:
 ```bibtex
 @article{resqmesh2026,
   title   = {An Urgency-Aware Scheduling Framework for LoRa Mesh Networks in Disaster Communication},
-  author  = {Srinivasan, Moniish Mohan and Manivannan, Kirankumar and Roy R, Reena and K, Kumaran and G, Saranya},
+  author  = {Srinivasan, Moniish Mohan and Manivannan, Kirankumar and K, Kumaran and G, Saranya},
   journal = {Under review},
   year    = {2026}
 }
 ```
 
----
-
-## License
-
-Code: MIT License (or specify your preferred license)
-Dataset: CC-BY 4.0
-
----
 
 ## Acknowledgment
 
