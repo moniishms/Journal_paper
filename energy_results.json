@@ -1,0 +1,224 @@
+{
+  "baseline": {
+    "FIFO": {
+      "mean_latency": 288.7056448902098,
+      "p75_latency": 306.1624204457383,
+      "jitter": 53.08295552690414,
+      "delivery_ratio": 0.3070106078288656,
+      "mean_energy_mJ": 13563.260321707668
+    },
+    "RR": {
+      "mean_latency": 211.14259272262862,
+      "p75_latency": 275.99464112306566,
+      "jitter": 78.47071086315148,
+      "delivery_ratio": 0.30702161680338996,
+      "mean_energy_mJ": 10494.394811713279
+    },
+    "FPS": {
+      "mean_latency": 160.13390312576894,
+      "p75_latency": 219.43259606356665,
+      "jitter": 79.01600839785011,
+      "delivery_ratio": 0.3073735350257838,
+      "mean_energy_mJ": 8468.793816183208
+    },
+    "RESQ": {
+      "mean_latency": 96.0286902819096,
+      "p75_latency": 112.22149570470064,
+      "jitter": 59.19108331381669,
+      "delivery_ratio": 0.30510479673766255,
+      "mean_energy_mJ": 5952.708849591763
+    },
+    "ML_RESQ": {
+      "mean_latency": 96.0286902819096,
+      "p75_latency": 112.22149570470064,
+      "jitter": 59.19108331381669,
+      "delivery_ratio": 0.30510479673766255,
+      "mean_energy_mJ": 5952.708854591764
+    }
+  },
+  "high_routine": {
+    "FIFO": {
+      "mean_latency": 287.6980430211116,
+      "p75_latency": 306.1168629049006,
+      "jitter": 55.57394570162785,
+      "delivery_ratio": 0.30632347040652547,
+      "mean_energy_mJ": 13516.050638060671
+    },
+    "RR": {
+      "mean_latency": 212.27048633325217,
+      "p75_latency": 275.43401534367024,
+      "jitter": 77.73759578191115,
+      "delivery_ratio": 0.30365979983201546,
+      "mean_energy_mJ": 10550.41990048039
+    },
+    "FPS": {
+      "mean_latency": 101.3250206728472,
+      "p75_latency": 246.0462507553636,
+      "jitter": 120.97417927732457,
+      "delivery_ratio": 0.3014111165415927,
+      "mean_energy_mJ": 6176.377792996306
+    },
+    "RESQ": {
+      "mean_latency": 87.29128123129705,
+      "p75_latency": 88.31033846862627,
+      "jitter": 61.51931215735512,
+      "delivery_ratio": 0.30622957491517266,
+      "mean_energy_mJ": 5582.881786966229
+    },
+    "ML_RESQ": {
+      "mean_latency": 87.29128123129705,
+      "p75_latency": 88.31033846862627,
+      "jitter": 61.51931215735512,
+      "delivery_ratio": 0.30622957491517266,
+      "mean_energy_mJ": 5582.881791966228
+    }
+  },
+  "burst": {
+    "FIFO": {
+      "mean_latency": 288.95390747777145,
+      "p75_latency": 306.2660236401026,
+      "jitter": 53.1015510330035,
+      "delivery_ratio": 0.16453424385707024,
+      "mean_energy_mJ": 13572.653747980557
+    },
+    "RR": {
+      "mean_latency": 221.59237859363105,
+      "p75_latency": 285.76105305207955,
+      "jitter": 78.41388685824093,
+      "delivery_ratio": 0.16444125070774135,
+      "mean_energy_mJ": 10905.86970667622
+    },
+    "FPS": {
+      "mean_latency": 203.49889603842198,
+      "p75_latency": 293.7263317943562,
+      "jitter": 101.71833727930652,
+      "delivery_ratio": 0.16311369415682594,
+      "mean_energy_mJ": 10204.270524903914
+    },
+    "RESQ": {
+      "mean_latency": 119.99564098659235,
+      "p75_latency": 169.6702325126125,
+      "jitter": 78.53957559768206,
+      "delivery_ratio": 0.16362221806961763,
+      "mean_energy_mJ": 6888.781984478212
+    },
+    "ML_RESQ": {
+      "mean_latency": 121.02542926227213,
+      "p75_latency": 173.932305412795,
+      "jitter": 77.73694379865353,
+      "delivery_ratio": 0.16626276228290818,
+      "mean_energy_mJ": 6894.186095403166
+    }
+  },
+  "sos_intensive": {
+    "FIFO": {
+      "mean_latency": 287.6980430211116,
+      "p75_latency": 306.1168629049006,
+      "jitter": 55.57394570162785,
+      "delivery_ratio": 0.30632347040652547,
+      "mean_energy_mJ": 13516.050638060671
+    },
+    "RR": {
+      "mean_latency": 212.27048633325217,
+      "p75_latency": 275.43401534367024,
+      "jitter": 77.73759578191115,
+      "delivery_ratio": 0.30365979983201546,
+      "mean_energy_mJ": 10550.41990048039
+    },
+    "FPS": {
+      "mean_latency": 278.7185061535123,
+      "p75_latency": 304.74746203253386,
+      "jitter": 63.614477882630624,
+      "delivery_ratio": 0.30572605651074003,
+      "mean_energy_mJ": 13168.796006236931
+    },
+    "RESQ": {
+      "mean_latency": 156.7955864561428,
+      "p75_latency": 225.068464129723,
+      "jitter": 79.82669483256903,
+      "delivery_ratio": 0.30469825311909216,
+      "mean_energy_mJ": 8349.480072261866
+    },
+    "ML_RESQ": {
+      "mean_latency": 156.7955864561428,
+      "p75_latency": 225.068464129723,
+      "jitter": 79.82669483256903,
+      "delivery_ratio": 0.30469825311909216,
+      "mean_energy_mJ": 8349.480077261862
+    }
+  },
+  "large_load": {
+    "FIFO": {
+      "mean_latency": 293.3416281002309,
+      "p75_latency": 307.36932788890584,
+      "jitter": 49.02985223787677,
+      "delivery_ratio": 0.06170376951167157,
+      "mean_energy_mJ": 13745.514925198957
+    },
+    "RR": {
+      "mean_latency": 275.83066182483446,
+      "p75_latency": 300.25087430567197,
+      "jitter": 49.677319025796926,
+      "delivery_ratio": 0.06187620452688972,
+      "mean_energy_mJ": 13047.080278047095
+    },
+    "FPS": {
+      "mean_latency": 291.1372779621048,
+      "p75_latency": 306.84435229468835,
+      "jitter": 51.35431067595944,
+      "delivery_ratio": 0.061705172048685454,
+      "mean_energy_mJ": 13658.626863737112
+    },
+    "RESQ": {
+      "mean_latency": 209.08480485748038,
+      "p75_latency": 270.6181821765526,
+      "jitter": 74.139627313636,
+      "delivery_ratio": 0.061470923523585,
+      "mean_energy_mJ": 10422.34421043148
+    },
+    "ML_RESQ": {
+      "mean_latency": 209.08480485748038,
+      "p75_latency": 270.6181821765526,
+      "jitter": 74.139627313636,
+      "delivery_ratio": 0.061470923523585,
+      "mean_energy_mJ": 10422.34421543148
+    }
+  },
+  "packet_loss": {
+    "FIFO": {
+      "mean_latency": 289.4359253773906,
+      "p75_latency": 306.8700685216249,
+      "jitter": 53.57817731670872,
+      "delivery_ratio": 0.2799580697664848,
+      "mean_energy_mJ": 13824.586774114789
+    },
+    "RR": {
+      "mean_latency": 213.94578893793172,
+      "p75_latency": 278.09588684627283,
+      "jitter": 78.78963507358029,
+      "delivery_ratio": 0.28172338888404674,
+      "mean_energy_mJ": 10810.556160680253
+    },
+    "FPS": {
+      "mean_latency": 223.10837312146455,
+      "p75_latency": 289.88444122422226,
+      "jitter": 87.88351656275631,
+      "delivery_ratio": 0.27893607899806816,
+      "mean_energy_mJ": 11198.022995237547
+    },
+    "RESQ": {
+      "mean_latency": 106.95773606094193,
+      "p75_latency": 137.40280261731147,
+      "jitter": 65.968792501099,
+      "delivery_ratio": 0.2811749247122581,
+      "mean_energy_mJ": 6578.4543317367525
+    },
+    "ML_RESQ": {
+      "mean_latency": 106.95773606094193,
+      "p75_latency": 137.40280261731147,
+      "jitter": 65.968792501099,
+      "delivery_ratio": 0.2811749247122581,
+      "mean_energy_mJ": 6578.454336736752
+    }
+  }
+}
