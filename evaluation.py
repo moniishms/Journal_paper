@@ -1,10 +1,31 @@
+"""
+full_evaluation.py
 
+This is the single simulation script for this project, covering all
+six schedulers evaluated in the paper: FIFO, RR, FPS, ResQMesh
+(RESQ), ML-ResQMesh (ML_RESQ), and the lightweight Q-learning baseline
+(QLEARN). For each scheduler and each of the six traffic scenarios, it
+computes mean latency, P75 latency, jitter, delivery ratio, mean
+energy consumption per delivered message, and the mean criticality of
+delivered messages.
+
+An earlier, narrower version of this simulation (five schedulers,
+latency/P75/jitter/delivery ratio only, no energy or criticality
+tracking) produced the results originally reported in Table VI. This
+script's output for those five schedulers and four metrics was
+verified to match that earlier version's output exactly before any
+of the additional metrics (energy, criticality) or the QLEARN
+scheduler were trusted. This script now supersedes that earlier
+version and is the sole reference for reproducing every quantitative
+result reported in the paper.
+"""
 
 import random
 import numpy as np
 from collections import deque
 import joblib
 import pandas as pd
+import json
 
 NUM_NODES = 50
 SIM_TIME = 4000
@@ -16,20 +37,33 @@ ML_WEIGHT = 0.2
 ml_model = joblib.load("resqmesh_dt_model.pkl")
 
 # ---------------------------------------------------------------------
-# Energy model constants (Section III-F)
+# Energy model constants (Section III, Energy Consumption Model)
 # ---------------------------------------------------------------------
-V = 3.3                # supply voltage (V)
-I_TX = 0.120            # transmit current (A)  -> 120 mA
-I_IDLE = 0.012           # idle-listening current (A) -> 12 mA
-P_TX = V * I_TX          # transmit power (W)
-P_IDLE = V * I_IDLE      # idle power (W)
+V = 3.3
+I_TX = 0.120
+I_IDLE = 0.012
+P_TX = V * I_TX
+P_IDLE = V * I_IDLE
 
-EPS_OP = 1e-9            # energy per arithmetic/comparison op (J) ~1 nJ
-OPS_RESQ = 5              # 3 mults + 2 adds in urgency()
-OPS_ML = 10               # OPS_RESQ + up to 5 tree-node comparisons (max_depth=5)
-
+EPS_OP = 1e-9
+OPS_RESQ = 5
+OPS_ML = 10
+# QLEARN per-candidate cost: state discretization (3 divisions/multiplications
+# + 2 min() bound checks = ~5 ops) plus one dict lookup (~1 op) plus the
+# epsilon-greedy comparison (~1 op) = ~7 ops per candidate evaluated.
+OPS_QLEARN = 7
 E_PROC_RESQ = OPS_RESQ * EPS_OP
 E_PROC_ML = OPS_ML * EPS_OP
+E_PROC_QLEARN = OPS_QLEARN * EPS_OP
+
+# ---------------------------------------------------------------------
+# Q-learning hyperparameters (Section III, Lightweight Q-Learning Baseline)
+# ---------------------------------------------------------------------
+ALPHA = 0.3
+EPSILON = 0.1
+N_WAIT_BUCKETS = 5
+N_OCC_BUCKETS = 5
+N_HOP_BUCKETS = 3
 
 
 class Message:
@@ -42,15 +76,12 @@ class Message:
 def transmission_delay(hop, retrans_prob):
     base = hop
     noise = random.uniform(0, 2)
-
     spike = 0
     if random.random() < SPIKE_PROB:
         spike = random.randint(2, 5)
-
     retrans = 0
     if random.random() < retrans_prob:
         retrans = hop
-
     return base + noise + spike + retrans
 
 
@@ -69,22 +100,13 @@ def generate_message(t, criticality_pool):
 
 
 def select_fifo(queues):
-    oldest_msg = None
-    oldest_q = None
-    oldest_index = None
-    oldest_time = 1e9
-
+    oldest_msg, oldest_q, oldest_index, oldest_time = None, None, None, 1e9
     for q in queues:
         for i, m in enumerate(q):
             if m.arrival < oldest_time:
-                oldest_time = m.arrival
-                oldest_msg = m
-                oldest_q = q
-                oldest_index = i
-
+                oldest_time, oldest_msg, oldest_q, oldest_index = m.arrival, m, q, i
     if oldest_msg:
         del oldest_q[oldest_index]
-
     return oldest_msg
 
 
@@ -99,38 +121,22 @@ def select_rr(queues, rr_index):
 
 
 def select_fps(queues):
-    best = None
-    best_q = None
-    best_index = None
-    highest_priority = -1
-
+    best, best_q, best_index, highest_priority = None, None, None, -1
     for q in queues:
         for i, m in enumerate(q):
             priority = m.criticality
-
             if priority > highest_priority:
-                highest_priority = priority
-                best = m
-                best_q = q
-                best_index = i
+                highest_priority, best, best_q, best_index = priority, m, q, i
             elif priority == highest_priority:
                 if m.arrival < best.arrival:
-                    best = m
-                    best_q = q
-                    best_index = i
-
+                    best, best_q, best_index = m, q, i
     if best:
         del best_q[best_index]
-
     return best
 
 
 def select_resqmesh(queues, t):
-    best = None
-    best_q = None
-    best_index = None
-    best_score = -1
-
+    best, best_q, best_index, best_score = None, None, None, -1
     for q in queues:
         for i, m in enumerate(q):
             Tm = t - m.arrival
@@ -138,14 +144,9 @@ def select_resqmesh(queues, t):
             Sm = len(q) / Q_MAX
             score = urgency(Tm, Cm, Sm)
             if score > best_score:
-                best_score = score
-                best = m
-                best_q = q
-                best_index = i
-
+                best_score, best, best_q, best_index = score, m, q, i
     if best:
         del best_q[best_index]
-
     return best
 
 
@@ -157,38 +158,61 @@ def select_resqmesh_ml(queues, t):
             Cm = m.criticality
             Sm = len(q) / Q_MAX
             candidates.append((m, q, i, Tm, Cm, Sm))
-
     if not candidates:
         return None
-
     feat_df = pd.DataFrame(
-        [[c[4], c[5], c[0].hop] for c in candidates],
-        columns=["Cm", "Sm", "hop"]
+        [[c[4], c[5], c[0].hop] for c in candidates], columns=["Cm", "Sm", "hop"]
     )
     risks = ml_model.predict_proba(feat_df)[:, 1]
-
-    best = None
-    best_q = None
-    best_index = None
-    best_score = -1
-
+    best, best_q, best_index, best_score = None, None, None, -1
     for (m, q, i, Tm, Cm, Sm), risk in zip(candidates, risks):
         base = urgency(Tm, Cm, Sm)
         score = base + ML_WEIGHT * risk
         if score > best_score:
-            best_score = score
-            best = m
-            best_q = q
-            best_index = i
-
+            best_score, best, best_q, best_index = score, m, q, i
     if best:
         del best_q[best_index]
-
     return best
 
 
-def run_simulation(scheduler_type, scenario="baseline"):
+def discretize_state(Tm, Cm, Sm, hop):
+    wait_bucket = min(int(Tm / 10), N_WAIT_BUCKETS - 1)
+    occ_bucket = min(int(Sm * N_OCC_BUCKETS), N_OCC_BUCKETS - 1)
+    hop_bucket = min((hop - 1) * N_HOP_BUCKETS // 7, N_HOP_BUCKETS - 1)
+    return (wait_bucket, Cm, occ_bucket, hop_bucket)
 
+
+def select_qlearn(queues, t, q_table):
+    candidates = []
+    for q in queues:
+        for i, m in enumerate(q):
+            Tm = t - m.arrival
+            Cm = m.criticality
+            Sm = len(q) / Q_MAX
+            state = discretize_state(Tm, Cm, Sm, m.hop)
+            candidates.append((m, q, i, state))
+    if not candidates:
+        return None, None
+    if random.random() < EPSILON:
+        chosen = random.choice(candidates)
+    else:
+        best_val, chosen = -1e18, candidates[0]
+        for cand in candidates:
+            val = q_table.get(cand[3], 0.0)
+            if val > best_val:
+                best_val, chosen = val, cand
+    m, q, i, state = chosen
+    del q[i]
+    return m, state
+
+
+def qlearn_update(q_table, state, observed_latency):
+    reward = -observed_latency
+    old_val = q_table.get(state, 0.0)
+    q_table[state] = old_val + ALPHA * (reward - old_val)
+
+
+def run_simulation(scheduler_type, scenario="baseline"):
     gen_prob = 0.01
     retrans_prob = 0.15
     criticality_pool = [1, 2, 3]
@@ -207,18 +231,20 @@ def run_simulation(scheduler_type, scenario="baseline"):
     queues = [deque() for _ in range(NUM_NODES)]
     channel_busy_until = 0
     latencies = []
+    delivered_criticalities = []
+    energies = []
     generated = 0
     delivered = 0
     rr_index = 0
-
-    # --- energy-tracking additions (do not affect scheduling behaviour) ---
-    t_waits = []
-    t_txs = []
-    energies = []
-    e_proc = E_PROC_ML if scheduler_type == "ML_RESQ" else E_PROC_RESQ
+    q_table = {}
+    if scheduler_type == "ML_RESQ":
+        e_proc = E_PROC_ML
+    elif scheduler_type == "QLEARN":
+        e_proc = E_PROC_QLEARN
+    else:
+        e_proc = E_PROC_RESQ
 
     for t in range(SIM_TIME):
-
         for q in queues:
             for m in list(q):
                 if t - m.arrival > TTL:
@@ -231,12 +257,11 @@ def run_simulation(scheduler_type, scenario="baseline"):
         for i in range(NUM_NODES):
             if random.random() < current_gen_prob:
                 if len(queues[i]) < Q_MAX:
-                    queues[i].append(
-                        generate_message(t, criticality_pool)
-                    )
+                    queues[i].append(generate_message(t, criticality_pool))
                     generated += 1
 
         if t >= channel_busy_until:
+            state = None
             if scheduler_type == "FIFO":
                 msg = select_fifo(queues)
             elif scheduler_type == "RR":
@@ -247,93 +272,83 @@ def run_simulation(scheduler_type, scenario="baseline"):
                 msg = select_resqmesh(queues, t)
             elif scheduler_type == "ML_RESQ":
                 msg = select_resqmesh_ml(queues, t)
+            elif scheduler_type == "QLEARN":
+                msg, state = select_qlearn(queues, t, q_table)
             else:
                 msg = None
 
             if msg:
-                t_wait = t - msg.arrival                 # queueing delay
+                t_wait = t - msg.arrival
                 delay = transmission_delay(msg.hop, retrans_prob)
-                t_tx = delay                              # transmission time
+                t_tx = delay
                 channel_busy_until = t + delay
                 latency = channel_busy_until - msg.arrival
                 latencies.append(latency)
+                delivered_criticalities.append(msg.criticality)
                 delivered += 1
-
-                t_waits.append(t_wait)
-                t_txs.append(t_tx)
 
                 e_m = (P_TX * t_tx) + (P_IDLE * t_wait) + e_proc
                 energies.append(e_m)
 
-    return latencies, generated, delivered, t_waits, t_txs, energies
+                if scheduler_type == "QLEARN" and state is not None:
+                    qlearn_update(q_table, state, latency)
+
+    return latencies, generated, delivered, delivered_criticalities, energies
 
 
-def compute_metrics(latencies, generated, delivered):
+def compute_metrics(latencies, generated, delivered, delivered_criticalities, energies):
     mean_latency = np.mean(latencies)
     p75 = np.percentile(latencies, 75)
     jitter = np.std(latencies)
     delivery_ratio = delivered / generated if generated > 0 else 0
-    return mean_latency, p75, jitter, delivery_ratio
+    mean_criticality = np.mean(delivered_criticalities) if delivered_criticalities else 0
+    mean_energy_mJ = np.mean(energies) * 1000 if energies else 0
+    return mean_latency, p75, jitter, delivery_ratio, mean_criticality, mean_energy_mJ
 
 
-scenarios = [
-    "baseline",
-    "high_routine",
-    "burst",
-    "sos_intensive",
-    "large_load",
-    "packet_loss"
-]
-
-schedulers = ["FIFO", "RR", "FPS", "RESQ", "ML_RESQ"]
+scenarios = ["baseline", "high_routine", "burst", "sos_intensive", "large_load", "packet_loss"]
+all_schedulers = ["FIFO", "RR", "FPS", "RESQ", "ML_RESQ", "QLEARN"]
 
 results = {}
-energy_results = {}
 
 for scenario in scenarios:
     results[scenario] = {}
-    energy_results[scenario] = {}
-    for sch in schedulers:
+    for sch in all_schedulers:
         metrics_all = []
-        energy_all = []
         for trial in range(10):
             random.seed(1000 + trial)
             np.random.seed(1000 + trial)
-            lat, gen, deliv, t_waits, t_txs, energies = run_simulation(sch, scenario)
-            metrics = compute_metrics(lat, gen, deliv)
+            lat, gen, deliv, crit, energies = run_simulation(sch, scenario)
+            metrics = compute_metrics(lat, gen, deliv, crit, energies)
             metrics_all.append(metrics)
-            energy_all.append(np.mean(energies))  # mean energy/message, this trial
 
         avg = np.mean(metrics_all, axis=0)
-        avg_energy_j = np.mean(energy_all)
-
         results[scenario][sch] = avg
-        energy_results[scenario][sch] = avg_energy_j
 
         print(f"Scenario: {scenario} | Scheduler: {sch}")
         print(f"  Mean Latency : {avg[0]:.2f}")
         print(f"  P75 Latency  : {avg[1]:.2f}")
         print(f"  Jitter       : {avg[2]:.2f}")
         print(f"  Delivery Ratio: {avg[3]:.3f}")
-        print(f"  Mean Energy/msg: {avg_energy_j*1000:.4f} mJ")
+        print(f"  Mean Delivered Criticality: {avg[4]:.3f}")
+        print(f"  Mean Energy/msg (mJ): {avg[5]:.4f}")
         print("-------------")
 
-# Save results for report generation
-import json
 out = {}
 for scenario in scenarios:
     out[scenario] = {}
-    for sch in schedulers:
+    for sch in all_schedulers:
         m = results[scenario][sch]
         out[scenario][sch] = {
             "mean_latency": float(m[0]),
             "p75_latency": float(m[1]),
             "jitter": float(m[2]),
             "delivery_ratio": float(m[3]),
-            "mean_energy_mJ": float(energy_results[scenario][sch] * 1000),
+            "mean_delivered_criticality": float(m[4]),
+            "mean_energy_mJ": float(m[5]),
         }
 
-with open("energy_results.json", "w") as f:
+with open("full_evaluation_results.json", "w") as f:
     json.dump(out, f, indent=2)
 
-print("\nSaved to energy_results.json")
+print("\nSaved to full_evaluation_results.json")

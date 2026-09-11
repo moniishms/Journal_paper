@@ -5,6 +5,7 @@
       "p75_latency": 306.1624204457383,
       "jitter": 53.08295552690414,
       "delivery_ratio": 0.3070106078288656,
+      "mean_delivered_criticality": 1.991575056794515,
       "mean_energy_mJ": 13563.260321707668
     },
     "RR": {
@@ -12,28 +13,40 @@
       "p75_latency": 275.99464112306566,
       "jitter": 78.47071086315148,
       "delivery_ratio": 0.30702161680338996,
-      "mean_energy_mJ": 10494.394811713279
+      "mean_delivered_criticality": 1.997268746398421,
+      "mean_energy_mJ": 10494.39481171328
     },
     "FPS": {
       "mean_latency": 160.13390312576894,
       "p75_latency": 219.43259606356665,
       "jitter": 79.01600839785011,
       "delivery_ratio": 0.3073735350257838,
-      "mean_energy_mJ": 8468.793816183208
+      "mean_delivered_criticality": 2.985167473268585,
+      "mean_energy_mJ": 8468.793816183206
     },
     "RESQ": {
       "mean_latency": 96.0286902819096,
       "p75_latency": 112.22149570470064,
       "jitter": 59.19108331381669,
       "delivery_ratio": 0.30510479673766255,
-      "mean_energy_mJ": 5952.708849591763
+      "mean_delivered_criticality": 2.9655037143153855,
+      "mean_energy_mJ": 5952.708849591762
     },
     "ML_RESQ": {
       "mean_latency": 96.0286902819096,
       "p75_latency": 112.22149570470064,
       "jitter": 59.19108331381669,
       "delivery_ratio": 0.30510479673766255,
-      "mean_energy_mJ": 5952.708854591764
+      "mean_delivered_criticality": 2.9655037143153855,
+      "mean_energy_mJ": 5952.708854591763
+    },
+    "QLEARN": {
+      "mean_latency": 25.126252952699012,
+      "p75_latency": 14.315919320401566,
+      "jitter": 51.775733490454925,
+      "delivery_ratio": 0.3712544929408822,
+      "mean_delivered_criticality": 1.9893380631078528,
+      "mean_energy_mJ": 2726.768655547231
     }
   },
   "high_routine": {
@@ -42,6 +55,7 @@
       "p75_latency": 306.1168629049006,
       "jitter": 55.57394570162785,
       "delivery_ratio": 0.30632347040652547,
+      "mean_delivered_criticality": 1.6020390667517415,
       "mean_energy_mJ": 13516.050638060671
     },
     "RR": {
@@ -49,6 +63,7 @@
       "p75_latency": 275.43401534367024,
       "jitter": 77.73759578191115,
       "delivery_ratio": 0.30365979983201546,
+      "mean_delivered_criticality": 1.6043880143426001,
       "mean_energy_mJ": 10550.41990048039
     },
     "FPS": {
@@ -56,21 +71,32 @@
       "p75_latency": 246.0462507553636,
       "jitter": 120.97417927732457,
       "delivery_ratio": 0.3014111165415927,
-      "mean_energy_mJ": 6176.377792996306
+      "mean_delivered_criticality": 2.648884761462489,
+      "mean_energy_mJ": 6176.377792996307
     },
     "RESQ": {
       "mean_latency": 87.29128123129705,
       "p75_latency": 88.31033846862627,
       "jitter": 61.51931215735512,
       "delivery_ratio": 0.30622957491517266,
+      "mean_delivered_criticality": 2.6191525223902548,
       "mean_energy_mJ": 5582.881786966229
     },
     "ML_RESQ": {
-      "mean_latency": 87.29128123129705,
-      "p75_latency": 88.31033846862627,
-      "jitter": 61.51931215735512,
-      "delivery_ratio": 0.30622957491517266,
-      "mean_energy_mJ": 5582.881791966228
+      "mean_latency": 86.33671121902157,
+      "p75_latency": 87.52772617428325,
+      "jitter": 59.81963587629299,
+      "delivery_ratio": 0.30604144800500827,
+      "mean_delivered_criticality": 2.61600409603031,
+      "mean_energy_mJ": 5545.4568366155045
+    },
+    "QLEARN": {
+      "mean_latency": 25.572183177878212,
+      "p75_latency": 14.460700568421213,
+      "jitter": 52.838079966856846,
+      "delivery_ratio": 0.3675720669605941,
+      "mean_delivered_criticality": 1.7196515689768586,
+      "mean_energy_mJ": 2748.9208130986435
     }
   },
   "burst": {
@@ -79,20 +105,23 @@
       "p75_latency": 306.2660236401026,
       "jitter": 53.1015510330035,
       "delivery_ratio": 0.16453424385707024,
-      "mean_energy_mJ": 13572.653747980557
+      "mean_delivered_criticality": 1.987738188834776,
+      "mean_energy_mJ": 13572.65374798056
     },
     "RR": {
       "mean_latency": 221.59237859363105,
       "p75_latency": 285.76105305207955,
       "jitter": 78.41388685824093,
       "delivery_ratio": 0.16444125070774135,
-      "mean_energy_mJ": 10905.86970667622
+      "mean_delivered_criticality": 2.0011111786250098,
+      "mean_energy_mJ": 10905.869706676218
     },
     "FPS": {
       "mean_latency": 203.49889603842198,
       "p75_latency": 293.7263317943562,
       "jitter": 101.71833727930652,
       "delivery_ratio": 0.16311369415682594,
+      "mean_delivered_criticality": 2.9881095846245325,
       "mean_energy_mJ": 10204.270524903914
     },
     "RESQ": {
@@ -100,14 +129,24 @@
       "p75_latency": 169.6702325126125,
       "jitter": 78.53957559768206,
       "delivery_ratio": 0.16362221806961763,
+      "mean_delivered_criticality": 2.9708359169181513,
       "mean_energy_mJ": 6888.781984478212
     },
     "ML_RESQ": {
-      "mean_latency": 121.02542926227213,
-      "p75_latency": 173.932305412795,
-      "jitter": 77.73694379865353,
-      "delivery_ratio": 0.16626276228290818,
-      "mean_energy_mJ": 6894.186095403166
+      "mean_latency": 119.99564098659235,
+      "p75_latency": 169.6702325126125,
+      "jitter": 78.53957559768206,
+      "delivery_ratio": 0.16362221806961763,
+      "mean_delivered_criticality": 2.9708359169181513,
+      "mean_energy_mJ": 6888.781989478212
+    },
+    "QLEARN": {
+      "mean_latency": 27.025597566299506,
+      "p75_latency": 16.687453994216792,
+      "jitter": 52.93311704369138,
+      "delivery_ratio": 0.1948196854991877,
+      "mean_delivered_criticality": 2.0066731072156325,
+      "mean_energy_mJ": 2833.1611494387266
     }
   },
   "sos_intensive": {
@@ -116,6 +155,7 @@
       "p75_latency": 306.1168629049006,
       "jitter": 55.57394570162785,
       "delivery_ratio": 0.30632347040652547,
+      "mean_delivered_criticality": 2.394397238906328,
       "mean_energy_mJ": 13516.050638060671
     },
     "RR": {
@@ -123,6 +163,7 @@
       "p75_latency": 275.43401534367024,
       "jitter": 77.73759578191115,
       "delivery_ratio": 0.30365979983201546,
+      "mean_delivered_criticality": 2.3994084366854276,
       "mean_energy_mJ": 10550.41990048039
     },
     "FPS": {
@@ -130,21 +171,32 @@
       "p75_latency": 304.74746203253386,
       "jitter": 63.614477882630624,
       "delivery_ratio": 0.30572605651074003,
-      "mean_energy_mJ": 13168.796006236931
+      "mean_delivered_criticality": 2.99741233827497,
+      "mean_energy_mJ": 13168.79600623693
     },
     "RESQ": {
       "mean_latency": 156.7955864561428,
       "p75_latency": 225.068464129723,
       "jitter": 79.82669483256903,
       "delivery_ratio": 0.30469825311909216,
-      "mean_energy_mJ": 8349.480072261866
+      "mean_delivered_criticality": 2.992838674504649,
+      "mean_energy_mJ": 8349.480072261864
     },
     "ML_RESQ": {
       "mean_latency": 156.7955864561428,
       "p75_latency": 225.068464129723,
       "jitter": 79.82669483256903,
       "delivery_ratio": 0.30469825311909216,
-      "mean_energy_mJ": 8349.480077261862
+      "mean_delivered_criticality": 2.992838674504649,
+      "mean_energy_mJ": 8349.480077261866
+    },
+    "QLEARN": {
+      "mean_latency": 25.24623951048942,
+      "p75_latency": 14.457478472427898,
+      "jitter": 51.444202015503016,
+      "delivery_ratio": 0.369190041986539,
+      "mean_delivered_criticality": 2.3001122273916077,
+      "mean_energy_mJ": 2735.9153703808142
     }
   },
   "large_load": {
@@ -153,13 +205,15 @@
       "p75_latency": 307.36932788890584,
       "jitter": 49.02985223787677,
       "delivery_ratio": 0.06170376951167157,
-      "mean_energy_mJ": 13745.514925198957
+      "mean_delivered_criticality": 1.986088937322858,
+      "mean_energy_mJ": 13745.514925198959
     },
     "RR": {
       "mean_latency": 275.83066182483446,
       "p75_latency": 300.25087430567197,
       "jitter": 49.677319025796926,
       "delivery_ratio": 0.06187620452688972,
+      "mean_delivered_criticality": 1.9990615385332824,
       "mean_energy_mJ": 13047.080278047095
     },
     "FPS": {
@@ -167,21 +221,32 @@
       "p75_latency": 306.84435229468835,
       "jitter": 51.35431067595944,
       "delivery_ratio": 0.061705172048685454,
-      "mean_energy_mJ": 13658.626863737112
+      "mean_delivered_criticality": 2.998854661447173,
+      "mean_energy_mJ": 13658.626863737114
     },
     "RESQ": {
       "mean_latency": 209.08480485748038,
       "p75_latency": 270.6181821765526,
       "jitter": 74.139627313636,
       "delivery_ratio": 0.061470923523585,
-      "mean_energy_mJ": 10422.34421043148
+      "mean_delivered_criticality": 2.9972234450386415,
+      "mean_energy_mJ": 10422.344210431478
     },
     "ML_RESQ": {
       "mean_latency": 209.08480485748038,
       "p75_latency": 270.6181821765526,
       "jitter": 74.139627313636,
       "delivery_ratio": 0.061470923523585,
+      "mean_delivered_criticality": 2.9972234450386415,
       "mean_energy_mJ": 10422.34421543148
+    },
+    "QLEARN": {
+      "mean_latency": 28.437860933566412,
+      "p75_latency": 16.30743479610431,
+      "jitter": 57.583681034060945,
+      "delivery_ratio": 0.07674228449227641,
+      "mean_delivered_criticality": 2.03844129147431,
+      "mean_energy_mJ": 2803.1345182168347
     }
   },
   "packet_loss": {
@@ -190,13 +255,15 @@
       "p75_latency": 306.8700685216249,
       "jitter": 53.57817731670872,
       "delivery_ratio": 0.2799580697664848,
-      "mean_energy_mJ": 13824.586774114789
+      "mean_delivered_criticality": 1.9997540525096429,
+      "mean_energy_mJ": 13824.58677411479
     },
     "RR": {
       "mean_latency": 213.94578893793172,
       "p75_latency": 278.09588684627283,
       "jitter": 78.78963507358029,
       "delivery_ratio": 0.28172338888404674,
+      "mean_delivered_criticality": 1.9986330837040267,
       "mean_energy_mJ": 10810.556160680253
     },
     "FPS": {
@@ -204,13 +271,15 @@
       "p75_latency": 289.88444122422226,
       "jitter": 87.88351656275631,
       "delivery_ratio": 0.27893607899806816,
-      "mean_energy_mJ": 11198.022995237547
+      "mean_delivered_criticality": 2.993615409317112,
+      "mean_energy_mJ": 11198.02299523755
     },
     "RESQ": {
       "mean_latency": 106.95773606094193,
       "p75_latency": 137.40280261731147,
       "jitter": 65.968792501099,
       "delivery_ratio": 0.2811749247122581,
+      "mean_delivered_criticality": 2.978084834700781,
       "mean_energy_mJ": 6578.4543317367525
     },
     "ML_RESQ": {
@@ -218,7 +287,16 @@
       "p75_latency": 137.40280261731147,
       "jitter": 65.968792501099,
       "delivery_ratio": 0.2811749247122581,
-      "mean_energy_mJ": 6578.454336736752
+      "mean_delivered_criticality": 2.978084834700781,
+      "mean_energy_mJ": 6578.454336736753
+    },
+    "QLEARN": {
+      "mean_latency": 25.81735445960475,
+      "p75_latency": 15.72165513556036,
+      "jitter": 51.407450835283115,
+      "delivery_ratio": 0.3420474675105768,
+      "mean_delivered_criticality": 2.003075817847943,
+      "mean_energy_mJ": 2910.3866097799373
     }
   }
 }

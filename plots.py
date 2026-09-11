@@ -1,3 +1,4 @@
+import json
 import matplotlib.pyplot as plt
 
 # ==========================================
@@ -11,12 +12,12 @@ plt.rcParams.update({
     "font.size": 12,
     "axes.titlesize": 14,
     "axes.labelsize": 12,
-    "xtick.labelsize": 11,
+    "xtick.labelsize": 10.5,
     "ytick.labelsize": 11
 })
 
 # ==========================================
-# Scheduler Labels
+# Scheduler Labels (all six, including the QLEARN baseline)
 # ==========================================
 
 schedulers = [
@@ -24,157 +25,99 @@ schedulers = [
     "RR",
     "FPS",
     "ResQMesh",
-    "ML-ResQMesh"
+    "ML-ResQMesh",
+    "QLEARN"
 ]
 
-# ==========================================
-# Scientific Color Palette
-# ==========================================
+scheduler_keys = ["FIFO", "RR", "FPS", "RESQ", "ML_RESQ", "QLEARN"]
 
-colors = [
-    "#4E79A7",   # Blue
-    "#F28E2B",   # Orange
-    "#59A14F",   # Green
-    "#E15759",   # Red
-    "#B07AA1"    # Purple
-]
-
-# ==========================================
-# Mean Latency Results
-# ==========================================
-results = {
-
-    "Baseline":[288.71,211.14,160.13,96.03,96.03],
-
-    "High Routine":[287.70,212.27,101.33,87.29,87.29],
-
-    "Burst":[288.95,221.59,203.50,120.00,121.03],
-
-    "SOS Intensive":[287.70,212.27,278.72,156.80,156.80],
-
-    "Large Load":[293.34,275.83,291.14,209.08,209.08],
-
-    "Packet Loss":[289.44,213.95,223.11,106.96,106.96]
+scenario_labels = {
+    "baseline": "Baseline",
+    "high_routine": "High Routine",
+    "burst": "Burst",
+    "sos_intensive": "SOS Intensive",
+    "large_load": "Large Load",
+    "packet_loss": "Packet Loss"
 }
+
 # ==========================================
-# Plot
+# Load results from full_evaluation.py output
 # ==========================================
+
+with open("full_evaluation_results.json", "r") as f:
+    data = json.load(f)
+
+
+def get_metric(metric_key):
+    """Return {display_scenario_name: [values per scheduler]} for a metric."""
+    out = {}
+    for scenario_key, display_name in scenario_labels.items():
+        out[display_name] = [
+            data[scenario_key][sch][metric_key] for sch in scheduler_keys
+        ]
+    return out
+
+
+# ==========================================
+# 1. Mean Latency -- vertical bar chart
+# ==========================================
+
+colors_latency = [
+    "#4E79A7", "#F28E2B", "#59A14F", "#E15759", "#B07AA1", "#76B7B2"
+]
+
+results = get_metric("mean_latency")
 
 for scenario, values in results.items():
 
-    fig, ax = plt.subplots(figsize=(6.8,4.8))
+    fig, ax = plt.subplots(figsize=(7.2, 4.8))
 
     bars = ax.bar(
         schedulers,
         values,
         width=0.60,
-        color=colors,
+        color=colors_latency,
         edgecolor="black",
         linewidth=0.8
     )
 
-    # Give space above bars
-    ax.set_ylim(0, max(values)*1.18)
-
-    # Value Labels
-    offset = max(values)*0.02
+    ax.set_ylim(0, max(values) * 1.18)
+    offset = max(values) * 0.02
 
     for bar in bars:
-
         height = bar.get_height()
-
         ax.text(
-            bar.get_x()+bar.get_width()/2,
-            height+offset,
+            bar.get_x() + bar.get_width() / 2,
+            height + offset,
             f"{height:.1f}",
-            ha="center",
-            va="bottom",
-            fontsize=9
+            ha="center", va="bottom", fontsize=9
         )
 
     ax.set_title(f"Mean Latency - {scenario}")
-
     ax.set_xlabel("Scheduler")
-
     ax.set_ylabel("Mean Latency (ms)")
+    ax.tick_params(axis='x', labelrotation=12)
 
-    ax.grid(
-        axis="y",
-        linestyle=":",
-        linewidth=0.8,
-        alpha=0.45
-    )
-
+    ax.grid(axis="y", linestyle=":", linewidth=0.8, alpha=0.45)
     ax.set_axisbelow(True)
-
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
     plt.tight_layout(pad=1.8)
-
-    plt.savefig(
-        f"MeanLatency_{scenario}.pdf",
-        bbox_inches="tight"
-    )
-
-    plt.show()
+    plt.savefig(f"MeanLatency_{scenario}.pdf", bbox_inches="tight")
+    pass
 
 print("All Mean Latency graphs generated successfully.")
-import matplotlib.pyplot as plt
 
 # ==========================================
-# Publication Style
+# 2. P75 Latency -- line chart
 # ==========================================
 
-plt.style.use("default")
-
-plt.rcParams.update({
-    "font.family": "Times New Roman",
-    "font.size": 12,
-    "axes.titlesize": 14,
-    "axes.labelsize": 12,
-    "xtick.labelsize": 11,
-    "ytick.labelsize": 11
-})
-
-# ==========================================
-# Scheduler Labels
-# ==========================================
-
-schedulers = [
-    "FIFO",
-    "RR",
-    "FPS",
-    "ResQMesh",
-    "ML-ResQMesh"
-]
-
-# ==========================================
-# P75 Results
-# ==========================================
-
-results = {
-
-    "Baseline":[306.16,275.99,219.43,112.22,112.22],
-
-    "High Routine":[306.12,275.43,246.05,88.31,88.31],
-
-    "Burst":[306.27,285.76,293.73,169.67,173.93],
-
-    "SOS Intensive":[306.12,275.43,304.75,225.07,225.07],
-
-    "Large Load":[307.37,300.25,306.84,270.62,270.62],
-
-    "Packet Loss":[306.87,278.10,289.88,137.40,137.40]
-}   
-
-# ==========================================
-# Plot
-# ==========================================
+results = get_metric("p75_latency")
 
 for scenario, values in results.items():
 
-    fig, ax = plt.subplots(figsize=(6.8,4.8))
+    fig, ax = plt.subplots(figsize=(7.2, 4.8))
 
     ax.plot(
         schedulers,
@@ -188,294 +131,129 @@ for scenario, values in results.items():
         markeredgewidth=2.2
     )
 
-    # Give space for labels
     ax.set_ylim(0, max(values) * 1.18)
-
     offset = max(values) * 0.02
 
-    # Value Labels
     for i, value in enumerate(values):
-
         ax.text(
-            i,
-            value + offset,
-            f"{value:.1f}",
-            ha="center",
-            va="bottom",
-            fontsize=9
+            i, value + offset, f"{value:.1f}",
+            ha="center", va="bottom", fontsize=9
         )
 
     ax.set_title(f"P75 Latency - {scenario}")
-
     ax.set_xlabel("Scheduler")
-
     ax.set_ylabel("P75 Latency (ms)")
+    ax.tick_params(axis='x', labelrotation=12)
 
-    ax.grid(
-        linestyle=":",
-        linewidth=0.8,
-        alpha=0.45
-    )
-
+    ax.grid(linestyle=":", linewidth=0.8, alpha=0.45)
     ax.set_axisbelow(True)
-
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
     plt.tight_layout(pad=1.8)
-
-    plt.savefig(
-        f"P75Latency_{scenario}.pdf",
-        bbox_inches="tight"
-    )
-
-    plt.show()
+    plt.savefig(f"P75Latency_{scenario}.pdf", bbox_inches="tight")
+    pass
 
 print("All P75 Latency graphs generated successfully.")
-import matplotlib.pyplot as plt
 
 # ==========================================
-# Publication Style
+# 3. Jitter -- horizontal bar chart
 # ==========================================
 
-plt.style.use("default")
-
-plt.rcParams.update({
-    "font.family": "Times New Roman",
-    "font.size": 12,
-    "axes.titlesize": 14,
-    "axes.labelsize": 12,
-    "xtick.labelsize": 11,
-    "ytick.labelsize": 11
-})
-
-# ==========================================
-# Scheduler Labels
-# ==========================================
-
-schedulers = [
-    "FIFO",
-    "RR",
-    "FPS",
-    "ResQMesh",
-    "ML-ResQMesh"
+colors_jitter = [
+    "#4E79A7", "#F28E2B", "#59A14F", "#E15759", "#B07AA1", "#76B7B2"
 ]
 
-# ==========================================
-# Scientific Color Palette
-# ==========================================
-
-colors = [
-    "#4E79A7",
-    "#F28E2B",
-    "#59A14F",
-    "#E15759",
-    "#B07AA1"
-]
-
-# ==========================================
-# Jitter Results
-# ==========================================
-results = {
-
-    "Baseline":[53.08,78.47,79.02,59.19,59.19],
-
-    "High Routine":[55.57,77.74,120.97,61.52,61.52],
-
-    "Burst":[53.10,78.41,101.72,78.54,77.74],
-
-    "SOS Intensive":[55.57,77.74,63.61,79.83,79.83],
-
-    "Large Load":[49.03,49.68,51.35,74.14,74.14],
-
-    "Packet Loss":[53.58,78.79,87.88,65.97,65.97]
-}
-
-# ==========================================
-# Plot
-# ==========================================
+results = get_metric("jitter")
 
 for scenario, values in results.items():
 
-    fig, ax = plt.subplots(figsize=(6.8,4.8))
+    fig, ax = plt.subplots(figsize=(7.2, 4.8))
 
     bars = ax.barh(
         schedulers,
         values,
         height=0.55,
-        color=colors,
+        color=colors_jitter,
         edgecolor="black",
         linewidth=0.8
     )
 
     ax.set_xlim(0, max(values) * 1.20)
-
     offset = max(values) * 0.02
 
-    # Value Labels
     for bar in bars:
-
         width = bar.get_width()
-
         ax.text(
             width + offset,
-            bar.get_y() + bar.get_height()/2,
+            bar.get_y() + bar.get_height() / 2,
             f"{width:.1f}",
-            va="center",
-            ha="left",
-            fontsize=9
+            va="center", ha="left", fontsize=9
         )
 
     ax.set_title(f"Jitter - {scenario}")
-
     ax.set_xlabel("Jitter (ms)")
-
     ax.set_ylabel("Scheduler")
 
-    ax.grid(
-        axis="x",
-        linestyle=":",
-        linewidth=0.8,
-        alpha=0.45
-    )
-
+    ax.grid(axis="x", linestyle=":", linewidth=0.8, alpha=0.45)
     ax.set_axisbelow(True)
-
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
     plt.tight_layout(pad=1.8)
-
-    plt.savefig(
-        f"Jitter_{scenario}.pdf", 
-        bbox_inches="tight"
-    )
-
-    plt.show()
+    plt.savefig(f"Jitter_{scenario}.pdf", bbox_inches="tight")
+    pass
 
 print("All Jitter graphs generated successfully.")
-import matplotlib.pyplot as plt
 
 # ==========================================
-# Publication Style
+# 4. Delivery Ratio -- pastel vertical bar chart
 # ==========================================
 
-plt.style.use("default")
-
-plt.rcParams.update({
-    "font.family": "Times New Roman",
-    "font.size": 12,
-    "axes.titlesize": 14,
-    "axes.labelsize": 12,
-    "xtick.labelsize": 11,
-    "ytick.labelsize": 11
-})
-
-# ==========================================
-# Scheduler Labels
-# ==========================================
-
-schedulers = [
-    "FIFO",
-    "RR",
-    "FPS",
-    "ResQMesh",
-    "ML-ResQMesh"
+colors_delivery = [
+    "#8FBCE6", "#F6B47B", "#8FD19E", "#F29A94", "#C7AEDB", "#9FD8D3"
 ]
 
-# ==========================================
-# Pastel Scientific Palette
-# ==========================================
-
-colors = [
-    "#8FBCE6",   # FIFO
-    "#F6B47B",   # RR
-    "#8FD19E",   # FPS
-    "#F29A94",   # ResQMesh
-    "#C7AEDB"    # ML-ResQMesh
-]
-
-# ==========================================
-# Delivery Ratio Results
-# ==========================================
-
-results = {
-
-    "Baseline":[0.307,0.307,0.307,0.305,0.305],
-
-    "High Routine":[0.306,0.304,0.301,0.306,0.306],
-
-    "Burst":[0.165,0.164,0.163,0.164,0.166],
-
-    "SOS Intensive":[0.306,0.304,0.306,0.305,0.305],
-
-    "Large Load":[0.062,0.062,0.062,0.061,0.061],
-
-    "Packet Loss":[0.280,0.282,0.279,0.281,0.281]
-}
-
-# ==========================================
-# Plot
-# ==========================================
+results = get_metric("delivery_ratio")
 
 for scenario, values in results.items():
 
-    fig, ax = plt.subplots(figsize=(6.8,4.8))
+    fig, ax = plt.subplots(figsize=(7.2, 4.8))
 
     bars = ax.bar(
         schedulers,
         values,
         width=0.45,
-        color=colors,
+        color=colors_delivery,
         edgecolor="black",
         linewidth=0.8,
         alpha=0.90
     )
 
-    # Honest axis
-    ax.set_ylim(0, max(values)*1.18)
+    ax.set_ylim(0, max(values) * 1.18)
+    offset = max(values) * 0.02
 
-    offset = max(values)*0.02
-
-    # Value Labels
     for bar in bars:
-
         height = bar.get_height()
-
         ax.text(
-            bar.get_x()+bar.get_width()/2,
-            height+offset,
+            bar.get_x() + bar.get_width() / 2,
+            height + offset,
             f"{height:.3f}",
-            ha="center",
-            va="bottom",
-            fontsize=9
+            ha="center", va="bottom", fontsize=9
         )
 
     ax.set_title(f"Delivery Ratio - {scenario}")
-
     ax.set_xlabel("Scheduler")
-
     ax.set_ylabel("Delivery Ratio")
+    ax.tick_params(axis='x', labelrotation=12)
 
-    ax.grid(
-        axis="y",
-        linestyle=":",
-        linewidth=0.8,
-        alpha=0.45
-    )
-
+    ax.grid(axis="y", linestyle=":", linewidth=0.8, alpha=0.45)
     ax.set_axisbelow(True)
-
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
     plt.tight_layout(pad=1.8)
-
-    plt.savefig(
-        f"DeliveryRatio_{scenario}.pdf",
-        bbox_inches="tight"
-    )
-
-    plt.show()
+    plt.savefig(f"DeliveryRatio_{scenario}.pdf", bbox_inches="tight")
+    pass
 
 print("All Delivery Ratio graphs generated successfully.")

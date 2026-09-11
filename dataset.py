@@ -38,9 +38,13 @@ def transmission_delay(hop):
 
     return base + noise + spike + retrans
 
+T_CAP = 50  # ticks
+
 def urgency(Tm, Cm, Sm):
-    W1, W2, W3 = 0.5, 0.3, 0.2
-    return W1 * Tm + W2 * Cm + W3 * Sm
+    W1, W2, W3 = 0.6, 0.3, 0.1
+    Tm_hat = min(Tm / T_CAP, 1)
+    Cm_hat = Cm / 3
+    return W1 * Tm_hat + W2 * Cm_hat + W3 * Sm
 
 def generate_message(t):
     Cm = random.choice([1, 2, 3])

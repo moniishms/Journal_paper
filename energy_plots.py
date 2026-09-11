@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 
 # ==========================================
-# Publication Style
+# Publication Style (matches existing plots.py)
 # ==========================================
 
 plt.style.use("default")
@@ -17,7 +17,7 @@ plt.rcParams.update({
 })
 
 # ==========================================
-# Scheduler Labels
+# Scheduler Labels (all six schedulers, including the QLEARN baseline)
 # ==========================================
 
 schedulers = [
@@ -25,26 +25,20 @@ schedulers = [
     "RR",
     "FPS",
     "ResQMesh",
-    "ML-ResQMesh"
+    "ML-ResQMesh",
+    "QLEARN"
 ]
 
-scheduler_keys = ["FIFO", "RR", "FPS", "RESQ", "ML_RESQ"]
-
-# ==========================================
-# Scientific Color Palette (same as Mean Latency plots)
-# ==========================================
+scheduler_keys = ["FIFO", "RR", "FPS", "RESQ", "ML_RESQ", "QLEARN"]
 
 colors = [
     "#4E79A7",   # Blue
     "#F28E2B",   # Orange
     "#59A14F",   # Green
     "#E15759",   # Red
-    "#B07AA1"    # Purple
+    "#B07AA1",   # Purple
+    "#76B7B2"    # Teal (QLEARN)
 ]
-
-# ==========================================
-# Scenario label mapping (json key -> display name)
-# ==========================================
 
 scenario_labels = {
     "baseline": "Baseline",
@@ -56,16 +50,16 @@ scenario_labels = {
 }
 
 # ==========================================
-# Load Energy Results
+# Load results from full_evaluation.py output
 # ==========================================
 
-with open("energy_results.json", "r") as f:
-    energy_data = json.load(f)
+with open("full_evaluation_results.json", "r") as f:
+    data = json.load(f)
 
 results = {}
 for scenario_key, display_name in scenario_labels.items():
     values = [
-        energy_data[scenario_key][sch]["mean_energy_mJ"]
+        data[scenario_key][sch]["mean_energy_mJ"]
         for sch in scheduler_keys
     ]
     results[display_name] = values
@@ -87,16 +81,12 @@ for scenario, values in results.items():
         linewidth=0.8
     )
 
-    # Give space above bars
     ax.set_ylim(0, max(values) * 1.18)
 
-    # Value Labels
     offset = max(values) * 0.02
 
     for bar in bars:
-
         height = bar.get_height()
-
         ax.text(
             bar.get_x() + bar.get_width() / 2,
             height + offset,
@@ -107,10 +97,9 @@ for scenario, values in results.items():
         )
 
     ax.set_title(f"Mean Energy per Message - {scenario}")
-
     ax.set_xlabel("Scheduler")
-
     ax.set_ylabel("Mean Energy per Message (mJ)")
+    ax.tick_params(axis='x', labelrotation=15)
 
     ax.grid(
         axis="y",
@@ -120,7 +109,6 @@ for scenario, values in results.items():
     )
 
     ax.set_axisbelow(True)
-
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
@@ -131,6 +119,6 @@ for scenario, values in results.items():
         bbox_inches="tight"
     )
 
-    plt.show()
+    pass
 
-print("All Energy Consumption graphs generated successfully.")
+print("All Energy graphs generated successfully from full_evaluation_results.json.")
