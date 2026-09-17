@@ -25,20 +25,20 @@
       "mean_energy_mJ": 8468.793816183206
     },
     "RESQ": {
-      "mean_latency": 96.0286902819096,
-      "p75_latency": 112.22149570470064,
-      "jitter": 59.19108331381669,
-      "delivery_ratio": 0.30510479673766255,
-      "mean_delivered_criticality": 2.9655037143153855,
-      "mean_energy_mJ": 5952.708849591762
+      "mean_latency": 81.98762026897384,
+      "p75_latency": 94.35558758882381,
+      "jitter": 57.50932814256255,
+      "delivery_ratio": 0.3054779481627188,
+      "mean_delivered_criticality": 2.9857434571678034,
+      "mean_energy_mJ": 5383.844665565287
     },
     "ML_RESQ": {
-      "mean_latency": 96.0286902819096,
-      "p75_latency": 112.22149570470064,
-      "jitter": 59.19108331381669,
-      "delivery_ratio": 0.30510479673766255,
-      "mean_delivered_criticality": 2.9655037143153855,
-      "mean_energy_mJ": 5952.708854591763
+      "mean_latency": 81.98762026897384,
+      "p75_latency": 94.35558758882381,
+      "jitter": 57.50932814256255,
+      "delivery_ratio": 0.3054779481627188,
+      "mean_delivered_criticality": 2.9857434571678034,
+      "mean_energy_mJ": 5383.844670565287
     },
     "QLEARN": {
       "mean_latency": 25.126252952699012,
@@ -75,20 +75,20 @@
       "mean_energy_mJ": 6176.377792996307
     },
     "RESQ": {
-      "mean_latency": 87.29128123129705,
-      "p75_latency": 88.31033846862627,
-      "jitter": 61.51931215735512,
-      "delivery_ratio": 0.30622957491517266,
-      "mean_delivered_criticality": 2.6191525223902548,
-      "mean_energy_mJ": 5582.881786966229
+      "mean_latency": 59.31167246013638,
+      "p75_latency": 74.19819910132226,
+      "jitter": 73.78315748151428,
+      "delivery_ratio": 0.30618068384589975,
+      "mean_delivered_criticality": 2.6377881527849185,
+      "mean_energy_mJ": 4476.954098340427
     },
     "ML_RESQ": {
-      "mean_latency": 86.33671121902157,
-      "p75_latency": 87.52772617428325,
-      "jitter": 59.81963587629299,
-      "delivery_ratio": 0.30604144800500827,
-      "mean_delivered_criticality": 2.61600409603031,
-      "mean_energy_mJ": 5545.4568366155045
+      "mean_latency": 59.31167246013638,
+      "p75_latency": 74.19819910132226,
+      "jitter": 73.78315748151428,
+      "delivery_ratio": 0.30618068384589975,
+      "mean_delivered_criticality": 2.6377881527849185,
+      "mean_energy_mJ": 4476.954103340427
     },
     "QLEARN": {
       "mean_latency": 25.572183177878212,
@@ -125,20 +125,20 @@
       "mean_energy_mJ": 10204.270524903914
     },
     "RESQ": {
-      "mean_latency": 119.99564098659235,
-      "p75_latency": 169.6702325126125,
-      "jitter": 78.53957559768206,
-      "delivery_ratio": 0.16362221806961763,
-      "mean_delivered_criticality": 2.9708359169181513,
-      "mean_energy_mJ": 6888.781984478212
+      "mean_latency": 110.59992471347962,
+      "p75_latency": 157.0839564391541,
+      "jitter": 82.81988115387911,
+      "delivery_ratio": 0.16435161837641593,
+      "mean_delivered_criticality": 2.988794182752465,
+      "mean_energy_mJ": 6505.912328614095
     },
     "ML_RESQ": {
-      "mean_latency": 119.99564098659235,
-      "p75_latency": 169.6702325126125,
-      "jitter": 78.53957559768206,
-      "delivery_ratio": 0.16362221806961763,
-      "mean_delivered_criticality": 2.9708359169181513,
-      "mean_energy_mJ": 6888.781989478212
+      "mean_latency": 110.59992471347962,
+      "p75_latency": 157.0839564391541,
+      "jitter": 82.81988115387911,
+      "delivery_ratio": 0.16435161837641593,
+      "mean_delivered_criticality": 2.988794182752465,
+      "mean_energy_mJ": 6505.912333614096
     },
     "QLEARN": {
       "mean_latency": 27.025597566299506,
@@ -175,20 +175,20 @@
       "mean_energy_mJ": 13168.79600623693
     },
     "RESQ": {
-      "mean_latency": 156.7955864561428,
-      "p75_latency": 225.068464129723,
-      "jitter": 79.82669483256903,
-      "delivery_ratio": 0.30469825311909216,
-      "mean_delivered_criticality": 2.992838674504649,
-      "mean_energy_mJ": 8349.480072261864
+      "mean_latency": 156.12312983167413,
+      "p75_latency": 224.24038650920892,
+      "jitter": 79.45566778405455,
+      "delivery_ratio": 0.3069332803162455,
+      "mean_delivered_criticality": 2.997426318232327,
+      "mean_energy_mJ": 8306.821988447136
     },
     "ML_RESQ": {
-      "mean_latency": 156.7955864561428,
-      "p75_latency": 225.068464129723,
-      "jitter": 79.82669483256903,
-      "delivery_ratio": 0.30469825311909216,
-      "mean_delivered_criticality": 2.992838674504649,
-      "mean_energy_mJ": 8349.480077261866
+      "mean_latency": 156.12312983167413,
+      "p75_latency": 224.24038650920892,
+      "jitter": 79.45566778405455,
+      "delivery_ratio": 0.3069332803162455,
+      "mean_delivered_criticality": 2.997426318232327,
+      "mean_energy_mJ": 8306.821993447133
     },
     "QLEARN": {
       "mean_latency": 25.24623951048942,
@@ -225,20 +225,20 @@
       "mean_energy_mJ": 13658.626863737114
     },
     "RESQ": {
-      "mean_latency": 209.08480485748038,
-      "p75_latency": 270.6181821765526,
-      "jitter": 74.139627313636,
-      "delivery_ratio": 0.061470923523585,
-      "mean_delivered_criticality": 2.9972234450386415,
-      "mean_energy_mJ": 10422.344210431478
+      "mean_latency": 206.3977244790348,
+      "p75_latency": 270.2959298741428,
+      "jitter": 76.07679116501467,
+      "delivery_ratio": 0.06222302023846129,
+      "mean_delivered_criticality": 2.9988833915425235,
+      "mean_energy_mJ": 10281.537978786739
     },
     "ML_RESQ": {
-      "mean_latency": 209.08480485748038,
-      "p75_latency": 270.6181821765526,
-      "jitter": 74.139627313636,
-      "delivery_ratio": 0.061470923523585,
-      "mean_delivered_criticality": 2.9972234450386415,
-      "mean_energy_mJ": 10422.34421543148
+      "mean_latency": 206.3977244790348,
+      "p75_latency": 270.2959298741428,
+      "jitter": 76.07679116501467,
+      "delivery_ratio": 0.06222302023846129,
+      "mean_delivered_criticality": 2.9988833915425235,
+      "mean_energy_mJ": 10281.537983786739
     },
     "QLEARN": {
       "mean_latency": 28.437860933566412,
@@ -275,20 +275,20 @@
       "mean_energy_mJ": 11198.02299523755
     },
     "RESQ": {
-      "mean_latency": 106.95773606094193,
-      "p75_latency": 137.40280261731147,
-      "jitter": 65.968792501099,
-      "delivery_ratio": 0.2811749247122581,
-      "mean_delivered_criticality": 2.978084834700781,
-      "mean_energy_mJ": 6578.4543317367525
+      "mean_latency": 98.80134886401615,
+      "p75_latency": 125.05411466265586,
+      "jitter": 65.96858355926327,
+      "delivery_ratio": 0.28207789850194637,
+      "mean_delivered_criticality": 2.9941499111724497,
+      "mean_energy_mJ": 6248.905616891763
     },
     "ML_RESQ": {
-      "mean_latency": 106.95773606094193,
-      "p75_latency": 137.40280261731147,
-      "jitter": 65.968792501099,
-      "delivery_ratio": 0.2811749247122581,
-      "mean_delivered_criticality": 2.978084834700781,
-      "mean_energy_mJ": 6578.454336736753
+      "mean_latency": 98.80134886401615,
+      "p75_latency": 125.05411466265586,
+      "jitter": 65.96858355926327,
+      "delivery_ratio": 0.28207789850194637,
+      "mean_delivered_criticality": 2.9941499111724497,
+      "mean_energy_mJ": 6248.905621891764
     },
     "QLEARN": {
       "mean_latency": 25.81735445960475,

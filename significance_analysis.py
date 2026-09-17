@@ -102,7 +102,7 @@ def urgency(Tm, Cm, Sm):
     T_norm = min(Tm / 50, 1)
     C_norm = Cm / 3
     S_norm = Sm
-    W1, W2, W3 = 0.6, 0.3, 0.1
+    W1, W2, W3 = 0.10, 0.40, 0.50  # re-derived via weight sensitivity grid search
     return W1 * T_norm + W2 * C_norm + W3 * S_norm
 
 

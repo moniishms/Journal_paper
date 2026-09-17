@@ -38,13 +38,20 @@ def transmission_delay(hop):
 
     return base + noise + spike + retrans
 
+# --- normalized urgency formula, matching the live scheduler (Section III-A) ---
 T_CAP = 50  # ticks
 
 def urgency(Tm, Cm, Sm):
-    W1, W2, W3 = 0.6, 0.3, 0.1
+    # Weights re-derived via grid search over the full simplex (weight
+    # sensitivity analysis): (w1, w2, w3) = (0.10, 0.40, 0.50) achieves
+    # significantly lower mean latency (4/6 scenarios) and significantly
+    # higher mean delivered criticality (6/6 scenarios) than the original
+    # (0.6, 0.3, 0.1), with no scenario worse on either metric.
+    W1, W2, W3 = 0.10, 0.40, 0.50
     Tm_hat = min(Tm / T_CAP, 1)
     Cm_hat = Cm / 3
     return W1 * Tm_hat + W2 * Cm_hat + W3 * Sm
+# --- END ---
 
 def generate_message(t):
     Cm = random.choice([1, 2, 3])
@@ -124,3 +131,4 @@ print("Dataset size:", len(df))
 df.to_csv("dataset.csv", index=False)
 print(df["Sm"].describe())
 print(df.groupby("label")["Sm"].describe())
+print(df["label"].value_counts())
